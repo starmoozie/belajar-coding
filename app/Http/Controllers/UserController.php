@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -18,9 +19,15 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $entry = User::create($request->only(['name', 'email', 'password']));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil simpan data pengguna.',
+            'data'    => $entry
+        ]);
     }
 
     /**
@@ -28,7 +35,19 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menampilkan data pengguna.',
+                'data'    => User::findOrFail($id)
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data {$id} tidak ditemukan.",
+                'data'    => null
+            ]);
+        }
     }
 
     /**
