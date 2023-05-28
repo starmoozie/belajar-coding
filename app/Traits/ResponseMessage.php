@@ -7,6 +7,15 @@ namespace App\Traits;
  */
 trait ResponseMessage
 {
+    protected function successMessage($message = 'Success', $data = null, $code = 200)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data'    => $data
+        ], $code);
+    }
+
     /**
      * Show response message
      * 

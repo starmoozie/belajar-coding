@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 class BaseController extends Controller
 {
+    use \App\Traits\ResponseMessage;
+
     protected $model;
     protected $request;
 
@@ -12,13 +14,13 @@ class BaseController extends Controller
      */
     public function index()
     {
-        $entries = $this->model->all();
+        $model   = new $this->model;
+        $entries = $model->all();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Berhasil ambil data pengguna.',
-            'data'    => $entries
-        ]);
+        return $this->successMessage(
+            'Berhasil ambil data pengguna.',
+            $entries
+        );
     }
 
     /**
@@ -31,11 +33,10 @@ class BaseController extends Controller
 
         $entry   = $model->create($request->only(['name', 'email', 'password']));
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Berhasil simpan data pengguna.',
-            'data'    => $entry
-        ]);
+        return $this->successMessage(
+            'Berhasil simpan data pengguna.',
+            $entry
+        );
     }
 
     /**
@@ -47,17 +48,12 @@ class BaseController extends Controller
             $model = new $this->model;
             $entry = $model->findOrFail($id);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil menampilkan data pengguna.',
-                'data'    => $entry
-            ]);
+            return $this->successMessage(
+                'Berhasil menampilkan data pengguna.',
+                $entry
+            );
         } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => "Data {$id} tidak ditemukan.",
-                'data'    => null
-            ]);
+            return $this->failsMessage("Data {$id} tidak ditemukan.");
         }
     }
 
@@ -73,11 +69,10 @@ class BaseController extends Controller
             $entry   = $model->findOrFail($id)
                 ->update($request->only(['name', 'email', 'password']));
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil mengubah data pengguna.',
-                'data'    => $entry
-            ]);
+            return $this->successMessage(
+                'Berhasil mengubah data pengguna.',
+                $entry
+            );
         } catch (\Throwable $th) {
             $is_empty_message = empty($th->getMessage());
 
@@ -86,11 +81,7 @@ class BaseController extends Controller
                 return $th->getResponse()->original;
             }
 
-            return response()->json([
-                'success' => false,
-                'message' => "Data {$id} tidak ditemukan.",
-                'data'    => null
-            ]);
+            return $this->failsMessage("Data {$id} tidak ditemukan.");
         }
     }
 
@@ -103,17 +94,12 @@ class BaseController extends Controller
             $model = new $this->model;
             $entry = $model->findOrFail($id)->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil menghapus data pengguna.',
-                'data'    => null
-            ]);
+            return $this->successMessage(
+                'Berhasil menghapus data pengguna.',
+                $entry
+            );
         } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => "Data {$id} tidak ditemukan.",
-                'data'    => null
-            ]);
+            return $this->failsMessage("Data {$id} tidak ditemukan.");
         }
     }
 }
