@@ -8,6 +8,8 @@ class BaseController extends Controller
 
     protected $model;
     protected $request;
+    protected $resource;
+    protected $collection;
 
     /**
      * Display a listing of the resource.
@@ -17,7 +19,7 @@ class BaseController extends Controller
         $model   = new $this->model;
         $entries = $model->all();
 
-        return $this->successMessage($entries);
+        return $this->successMessage(new $this->collection($entries));
     }
 
     /**
@@ -30,7 +32,7 @@ class BaseController extends Controller
 
         $entry   = $model->create($request->only(['name', 'email', 'password']));
 
-        return $this->successMessage($entry);
+        return $this->successMessage(new $this->resource($entry));
     }
 
     /**
@@ -42,7 +44,7 @@ class BaseController extends Controller
             $model = new $this->model;
             $entry = $model->findOrFail($id);
 
-            return $this->successMessage($entry);
+            return $this->successMessage(new $this->resource($entry));
         } catch (\Throwable $th) {
             return $this->failsMessage();
         }
@@ -60,7 +62,7 @@ class BaseController extends Controller
             $entry   = $model->findOrFail($id);
             $entry->update($request->only(['name', 'email', 'password']));
 
-            return $this->successMessage($entry);
+            return $this->successMessage(new $this->resource($entry));
         } catch (\Throwable $th) {
             $is_empty_message = empty($th->getMessage());
 
