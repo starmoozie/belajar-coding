@@ -28,6 +28,7 @@ class BaseController extends Controller
     {
         $request = app($this->request);
         $model   = new $this->model;
+
         $entry   = $model->create($request->only(['name', 'email', 'password']));
 
         return response()->json([
@@ -78,6 +79,13 @@ class BaseController extends Controller
                 'data'    => $entry
             ]);
         } catch (\Throwable $th) {
+            $is_empty_message = empty($th->getMessage());
+
+            // Handle error validation message
+            if ($is_empty_message) {
+                return $th->getResponse()->original;
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => "Data {$id} tidak ditemukan.",
