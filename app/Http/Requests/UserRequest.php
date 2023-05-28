@@ -2,24 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 
-class UserRequest extends FormRequest
+class UserRequest extends BaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -40,32 +27,9 @@ class UserRequest extends FormRequest
     }
 
     /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Handle hashing password after validation.
      */
-    protected function failedValidation(Validator $validator)
-    {
-        $errors = (new ValidationException($validator))->errors();
-
-        throw new HttpResponseException(
-            $this->failsMessage($errors, JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        );
-    }
-
-    protected function failsMessage($message, $code = 400)
-    {
-        return response()->json([
-            'success' => false,
-            'message' => $message,
-            'data'    => null
-        ], $code);
-    }
-
-    public function passedValidation()
+    public function passedValidation(): void
     {
         $this->merge(['password' => \Hash::make($this->password)]);
     }
