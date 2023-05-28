@@ -7,11 +7,11 @@ namespace App\Traits;
  */
 trait ResponseMessage
 {
-    protected function successMessage($message = 'Success', $data = null, $code = 200)
+    protected function successMessage($data = null, $message = null, $code = 200)
     {
         return response()->json([
             'success' => true,
-            'message' => $message,
+            'message' => $message ?: __("message.success_".request()->method(), ['attribute' => request()->segment(2)]),
             'data'    => $data
         ], $code);
     }
@@ -23,11 +23,11 @@ trait ResponseMessage
      * @param integer $code
      * @return json
      */
-    protected function failsMessage($message, $code = 400)
+    protected function failsMessage($message = null, $code = 400)
     {
         return response()->json([
             'success' => false,
-            'message' => $message,
+            'message' => $message ?: __("message.fails_".request()->method(), ['attribute' => request()->segment(2)]),
             'data'    => null
         ], $code);
     }

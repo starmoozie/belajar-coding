@@ -17,10 +17,7 @@ class BaseController extends Controller
         $model   = new $this->model;
         $entries = $model->all();
 
-        return $this->successMessage(
-            'Berhasil ambil data pengguna.',
-            $entries
-        );
+        return $this->successMessage($entries);
     }
 
     /**
@@ -33,10 +30,7 @@ class BaseController extends Controller
 
         $entry   = $model->create($request->only(['name', 'email', 'password']));
 
-        return $this->successMessage(
-            'Berhasil simpan data pengguna.',
-            $entry
-        );
+        return $this->successMessage($entry);
     }
 
     /**
@@ -48,12 +42,9 @@ class BaseController extends Controller
             $model = new $this->model;
             $entry = $model->findOrFail($id);
 
-            return $this->successMessage(
-                'Berhasil menampilkan data pengguna.',
-                $entry
-            );
+            return $this->successMessage($entry);
         } catch (\Throwable $th) {
-            return $this->failsMessage("Data {$id} tidak ditemukan.");
+            return $this->failsMessage();
         }
     }
 
@@ -66,13 +57,10 @@ class BaseController extends Controller
             $request = app($this->request);
             $model   = new $this->model;
 
-            $entry   = $model->findOrFail($id)
-                ->update($request->only(['name', 'email', 'password']));
+            $entry   = $model->findOrFail($id);
+            $entry->update($request->only(['name', 'email', 'password']));
 
-            return $this->successMessage(
-                'Berhasil mengubah data pengguna.',
-                $entry
-            );
+            return $this->successMessage($entry);
         } catch (\Throwable $th) {
             $is_empty_message = empty($th->getMessage());
 
@@ -81,7 +69,7 @@ class BaseController extends Controller
                 return $th->getResponse()->original;
             }
 
-            return $this->failsMessage("Data {$id} tidak ditemukan.");
+            return $this->failsMessage();
         }
     }
 
@@ -94,12 +82,9 @@ class BaseController extends Controller
             $model = new $this->model;
             $entry = $model->findOrFail($id)->delete();
 
-            return $this->successMessage(
-                'Berhasil menghapus data pengguna.',
-                $entry
-            );
+            return $this->successMessage(null);
         } catch (\Throwable $th) {
-            return $this->failsMessage("Data {$id} tidak ditemukan.");
+            return $this->failsMessage();
         }
     }
 }
