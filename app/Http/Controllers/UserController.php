@@ -75,6 +75,18 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menghapus data pengguna.',
+                'data'    => User::findOrFail($id)->delete()
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data {$id} tidak ditemukan.",
+                'data'    => null
+            ]);
+        }
     }
 }
