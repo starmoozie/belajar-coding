@@ -7,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
+use App\Models\User;
 
 class UserRequest extends FormRequest
 {
@@ -26,8 +28,13 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:5',
-            'email' => 'required|max:50|email|unique:users,email',
+            'name' => 'required|max:50',
+            'email' => [
+                'required',
+                'max:50',
+                'email',
+                Rule::unique(User::class)->when($this->method() === 'PUT', fn($q) => $q->ignore($this->user))
+            ],
             'password' => 'required|confirmed',
         ];
     }

@@ -53,9 +53,21 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mengubah data pengguna.',
+                'data'    => User::findOrFail($id)->update($request->only(['name', 'email', 'password']))
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data {$id} tidak ditemukan.",
+                'data'    => null
+            ]);
+        }
     }
 
     /**
