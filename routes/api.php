@@ -2,7 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    UserController,
+    UserAddressController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResources([
-    'user' => UserController::class
+    'user' => UserController::class,
+    'address' => UserAddressController::class,
 ]);

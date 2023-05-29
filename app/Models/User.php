@@ -42,4 +42,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relasi 1 - N ke address
+     */
+    public function address()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
 }
