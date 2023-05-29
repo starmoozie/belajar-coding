@@ -14,4 +14,9 @@ class UserAddress extends Model
         'is_domicile',
         'address'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
