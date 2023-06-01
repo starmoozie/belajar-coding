@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources\Role;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\UserAddress\Collections;
-use App\Http\Resources\Role\Resources as RoleResources;
 
 class Resources extends JsonResource
 {
@@ -19,9 +18,7 @@ class Resources extends JsonResource
         return [
             'id'      => $this->id,
             'name'    => $this->name,
-            'email'   => $this->email,
-            'address' => new Collections($this->address),
-            'role'    => new RoleResources($this->role)
+            'menu'    => $this->menu
         ];
     }
 }
