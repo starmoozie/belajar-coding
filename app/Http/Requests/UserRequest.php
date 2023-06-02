@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use App\Models\Role;
 
 class UserRequest extends BaseRequest
 {
@@ -23,6 +24,10 @@ class UserRequest extends BaseRequest
                 Rule::unique(User::class)->when($this->method() === 'PUT', fn($q) => $q->ignore($this->user))
             ],
             'password' => 'required|confirmed',
+            'role_id' => [
+                'required',
+                Rule::exists(Role::class, 'id')
+            ]
         ];
     }
 
