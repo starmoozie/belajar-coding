@@ -18,6 +18,7 @@ class Resources extends JsonResource
         return [
             'id'         => $this->id,
             'label'      => $this->label,
+            'value'      => $this->value,
             'permission' => $this->permission
         ];
     }

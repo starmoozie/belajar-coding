@@ -5,6 +5,7 @@ namespace App\Http\Resources\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\UserAddress\Collections;
+use App\Http\Resources\Menu\Collections as MenuCollections;
 
 class Resources extends JsonResource
 {
@@ -18,7 +19,7 @@ class Resources extends JsonResource
         return [
             'id'      => $this->id,
             'name'    => $this->name,
-            'menu'    => $this->menu
+            'menu'    => new MenuCollections($this->menu)
         ];
     }
 }

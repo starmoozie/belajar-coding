@@ -10,4 +10,5 @@ return [
     'fails_POST'   => 'Gagal menyimpan data :attribute',
     'fails_PUT'    => 'Gagal mengubah data :attribute',
     'fails_DELETE' => 'Gagal menghapus data :attribute',
+    'already_used' => ':attribute sedang digunakan'
 ];

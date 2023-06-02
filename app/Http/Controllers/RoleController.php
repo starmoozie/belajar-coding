@@ -58,6 +58,30 @@ class RoleController extends BaseController
     }
 
     /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $model = new $this->model;
+            $entry = $model->findOrFail($id);
+
+            // Handle if role already used by user
+            if ($entry->user->count()) {
+                $current_page = request()->segment(2);
+
+                return $this->failsMessage(__('message.already_used', ['attribute' => "{$current_page} {$entry->name}"]));
+            }
+
+            $entry->delete();
+
+            return $this->successMessage(null);
+        } catch (\Throwable $th) {
+            return $this->failsMessage();
+        }
+    }
+
+    /**
      * Handle sync many to many ( menu )
      */
     public function syncMenu($entry, $menu): void
