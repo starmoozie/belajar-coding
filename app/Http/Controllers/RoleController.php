@@ -15,6 +15,21 @@ class RoleController extends BaseController
     protected $collection = Collections::class;
 
     /**
+     * Store a newly created resource in storage.
+     */
+    public function store()
+    {
+        $request = app($this->request);
+        $model   = new $this->model;
+
+        $entry   = $model->create($request->validated());
+
+        $this->syncMenu($entry, $request->menu);
+
+        return $this->successMessage(new $this->resource($entry));
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update($id)
@@ -27,12 +42,10 @@ class RoleController extends BaseController
             $entry   = $model->findOrFail($id);
             $entry->update($request->only(['name']));
 
-            // Sync relationship
-            $entry->menu()->sync(array_column($request->menu, 'id'));
+            $this->syncMenu($entry, $request->menu);
 
             return $this->successMessage(new $this->resource($entry));
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             $is_empty_message = empty($th->getMessage());
 
             // Handle error validation message
@@ -42,5 +55,13 @@ class RoleController extends BaseController
 
             return $this->failsMessage();
         }
+    }
+
+    /**
+     * Handle sync many to many ( menu )
+     */
+    public function syncMenu($entry, $menu): void
+    {
+        $entry->menu()->sync(array_column($menu, 'id'));
     }
 }

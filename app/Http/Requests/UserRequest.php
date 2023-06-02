@@ -38,4 +38,16 @@ class UserRequest extends BaseRequest
     {
         $this->merge(['password' => \Hash::make($this->password)]);
     }
+
+    /**
+     * Add param to validated request.
+     */
+    public function validated($key = null, $default = null): array
+    {
+        $parent = parent::validated();
+
+        return !$this->password
+            ? $parent
+            : array_merge($parent, ['password' => $this->password]);
+    }
 }

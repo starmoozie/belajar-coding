@@ -29,8 +29,7 @@ class BaseController extends Controller
     {
         $request = app($this->request);
         $model   = new $this->model;
-
-        $entry   = $model->create($request->only(['name', 'email', 'password', 'role_id']));
+        $entry   = $model->create($request->validated());
 
         return $this->successMessage(new $this->resource($entry));
     }
@@ -61,7 +60,7 @@ class BaseController extends Controller
             $model   = new $this->model;
 
             $entry   = $model->findOrFail($id);
-            $entry->update($request->only(['name', 'email', 'password', 'role_id']));
+            $entry->update($request->validated());
 
             return $this->successMessage(new $this->resource($entry));
         } catch (\Throwable $th) {
