@@ -28,5 +28,6 @@ Route::apiResources([
     'user' => UserController::class,
     'address' => UserAddressController::class,
     'role'  => RoleController::class,
-    'menu'  => MenuController::class,
 ]);
+
+Route::apiResource('menu', MenuController::class)->only(['index', 'show']);
