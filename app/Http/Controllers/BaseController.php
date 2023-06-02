@@ -30,7 +30,7 @@ class BaseController extends Controller
         $request = app($this->request);
         $model   = new $this->model;
 
-        $entry   = $model->create($request->only(['name', 'email', 'password']));
+        $entry   = $model->create($request->only(['name', 'email', 'password', 'role_id']));
 
         return $this->successMessage(new $this->resource($entry));
     }
@@ -57,6 +57,7 @@ class BaseController extends Controller
     {
         try {
             $request = app($this->request);
+
             $model   = new $this->model;
 
             $entry   = $model->findOrFail($id);

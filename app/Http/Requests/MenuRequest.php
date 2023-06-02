@@ -3,10 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
-use App\Models\Role;
 use App\Models\Menu;
 
-class RoleRequest extends BaseRequest
+class MenuRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,13 +18,8 @@ class RoleRequest extends BaseRequest
             'name' => [
                 'required',
                 'max:20',
-                Rule::unique(Role::class)->when($this->method() === 'PUT', fn($q) => $q->ignore($this->role))
+                Rule::unique(Menu::class)->when($this->method() === 'PUT', fn($q) => $q->ignore($this->user))
             ],
-            'menu' => 'required',
-            'menu.*.id' => [
-                'required',
-                Rule::exists(Menu::class)
-            ]
         ];
     }
 }

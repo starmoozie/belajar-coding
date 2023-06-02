@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     UserController,
     UserAddressController,
-    RoleController
+    RoleController,
+    MenuController,
 };
 
 /*
@@ -27,4 +28,5 @@ Route::apiResources([
     'user' => UserController::class,
     'address' => UserAddressController::class,
     'role'  => RoleController::class,
+    'menu'  => MenuController::class,
 ]);
