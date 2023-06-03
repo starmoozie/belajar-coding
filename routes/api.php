@@ -20,7 +20,7 @@ use App\Http\Controllers\{
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/profile', function (Request $request) {
     return $request->user();
 });
 

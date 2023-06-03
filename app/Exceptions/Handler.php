@@ -8,7 +8,7 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    use App\Traits\ResponseMessage;
+    use \App\Traits\ResponseMessage;
 
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
