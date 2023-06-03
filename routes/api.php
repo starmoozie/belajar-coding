@@ -21,7 +21,8 @@ use App\Http\Controllers\{
 |
 */
 
-Route::get('login', [LoginController::class, 'login'])->name('login');
+Route::get('login', [LoginController::class, 'unauthenticated'])->name('login');
+Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware('auth:api')->get('/profile', function (Request $request) {
     return $request->user();
