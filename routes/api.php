@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     UserAddressController,
     RoleController,
     MenuController,
+    Auth\LoginController,
 };
 
 /*
@@ -19,6 +20,8 @@ use App\Http\Controllers\{
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware('auth:api')->get('/profile', function (Request $request) {
     return $request->user();

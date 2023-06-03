@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Illuminate\Auth\AuthenticationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -31,5 +33,16 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(fn(MethodNotAllowedHttpException $exception) => $this->failsMessage($exception->getMessage()));
+
+        $this->renderable(fn(RouteNotFoundException $exception) => $this->failsMessage($exception->getMessage()));
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($request->expectsJson()) {
+            return $this->failsMessage(__('auth.token_invalid'));
+        }
+
+        return parent::render($request, $exception);
     }
 }
