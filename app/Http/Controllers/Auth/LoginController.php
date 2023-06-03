@@ -24,8 +24,20 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $entry = User::firstWhere('email', $request->email);
-        $entry->token = $entry->createToken('MyToken')->accessToken;
-        return $this->successMessage(new Resources($entry));
+        $auth = $request->user();
+
+        $this->removeAllTokens($auth);
+
+        $auth->token = $auth->createToken('MyToken')->accessToken;
+
+        return $this->successMessage(new Resources($auth));
+    }
+
+    /**
+     * Remove all tokens user
+     */
+    public function removeAllTokens($auth)
+    {
+        $auth->tokens->each(fn($q) => $q->delete());
     }
 }
