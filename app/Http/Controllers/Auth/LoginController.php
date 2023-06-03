@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use App\Http\Resources\User\Resources;
 
 class LoginController extends Controller
 {
@@ -22,6 +24,8 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        # code...
+        $entry = User::firstWhere('email', $request->email);
+        $entry->token = $entry->createToken('MyToken')->accessToken;
+        return $this->successMessage(new Resources($entry));
     }
 }

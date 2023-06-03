@@ -9,6 +9,8 @@ use App\Http\Resources\Role\Resources as RoleResources;
 
 class Resources extends JsonResource
 {
+    const LOGIN_ROUTE = 'login.post';
+
     /**
      * Transform the resource into an array.
      *
@@ -16,12 +18,21 @@ class Resources extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $default = [
             'id'      => $this->id,
             'name'    => $this->name,
             'email'   => $this->email,
             'address' => new Collections($this->address),
             'role'    => new RoleResources($this->role)
         ];
+
+        if (\Route::currentRouteName() === Self::LOGIN_ROUTE) {
+            return [
+                ...$default,
+                'token' => $this->token
+            ];
+        }
+
+        return $default;
     }
 }
